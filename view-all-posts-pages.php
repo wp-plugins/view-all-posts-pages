@@ -4,7 +4,7 @@ Plugin Name: View All Post's Pages
 Plugin URI: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Description: Provides a "view all" (single page) option for posts, pages, and custom post types paged using WordPress' <a href="http://codex.wordpress.org/Write_Post_SubPanel#Quicktags" target="_blank"><code>&lt;!--nextpage--&gt;</code> Quicktag</a> (multipage posts).
 Author: Erick Hitter (Oomph, Inc.)
-Version: 0.1
+Version: 0.2
 Author URI: http://www.thinkoomph.com/
 */
 
@@ -72,10 +72,11 @@ class view_all_posts_pages {
 		add_filter( 'page_rewrite_rules', array( $this, 'filter_page_rewrite_rules' ), 99 );
 		
 		add_filter( 'the_content', array( $this, 'filter_the_content' ), 0 );
-		add_filter( 'wp_link_pages_args', array( $this, 'filter_wp_link_pages_args' ), 999 );
-		
 		
 		$options = $this->get_options();
+		
+		if( array_key_exists( 'wlp', $options ) && $options[ 'wlp' ] === true )
+			add_filter( 'wp_link_pages_args', array( $this, 'filter_wp_link_pages_args_early' ), 0 );
 		
 		if( $options[ 'link' ] )
 			add_filter( 'the_content', array( $this, 'filter_the_content_auto' ), $options[ 'link_priority' ] );
@@ -215,17 +216,33 @@ class view_all_posts_pages {
 	}
 	
 	/*
+	 * Add wp_link_pages arguments filter if automatic inclusion is chosen for a given post type
+	 * @param array $args
+	 * @uses $post, this::get_options, add_filter
+	 * @filter wp_link_pages
+	 * @return array
+	 */
+	function filter_wp_link_pages_args_early( $args ) {
+		global $post;
+		
+		$options = $this->get_options();
+		
+		if( in_array( $post->post_type, $options[ 'wlp_post_types' ] ) )
+			add_filter( 'wp_link_pages_args', array( $this, 'filter_wp_link_pages_args' ), 999 );
+		
+		return $args;
+	}
+	
+	/*
 	 * Filter wp_link_pages arguments to append "View all" link to output.
 	 * @param array $args
-	 * @uses this::get_options, $post, $more, this::is_view_all, esc_attr, esc_url
+	 * @uses this::get_options, $more, this::is_view_all, esc_attr, esc_url
 	 * @return array
 	 */
 	function filter_wp_link_pages_args( $args ) {
 		$options = $this->get_options();
 		
-		global $post;
-		
-		if( is_array( $options ) && array_key_exists( 'wlp', $options ) && $options[ 'wlp' ] === true && in_array( $post->post_type, $options[ 'wlp_post_types' ] ) ) {
+		if( is_array( $options ) ) {
 			extract( $options );
 			
 			//Set global $more to false so that wp_link_pages outputs links for all pages when viewing full post page
@@ -594,7 +611,8 @@ class view_all_posts_pages {
 	}
 }
 global $vapp;
-$vapp = new view_all_posts_pages;
+if( !is_a( $vapp, 'view_all_posts_pages' ) )
+	$vapp = new view_all_posts_pages;
 
 /*
  * Shortcut to function for generating full post view URL
@@ -626,6 +644,21 @@ function vapp_the_link( $link_text = 'View All', $class = 'vapp' ) {
 		
 		echo $link;
 	}
+}
+
+/*
+ * Filter wp_link_pages args.
+ * Function is a shortcut to class' filter.
+ * @param array $args
+ * @uses $vapp
+ * @return array
+ */
+function vapp_filter_wp_link_pages_args( $args ) {
+	global $vapp;
+	if( !is_a( $vapp, 'view_all_posts_pages' ) )
+		$vapp = new view_all_posts_pages;
+	
+	return $vapp->filter_wp_link_pages_args( $args );
 }
 
 if( !function_exists( 'is_view_all' ) ) {
