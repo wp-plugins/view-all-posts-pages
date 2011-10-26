@@ -4,7 +4,7 @@ Plugin Name: View All Post's Pages
 Plugin URI: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Description: Provides a "view all" (single page) option for posts, pages, and custom post types paged using WordPress' <a href="http://codex.wordpress.org/Write_Post_SubPanel#Quicktags" target="_blank"><code>&lt;!--nextpage--&gt;</code> Quicktag</a> (multipage posts).
 Author: Erick Hitter (Oomph, Inc.)
-Version: 0.2
+Version: 0.3
 Author URI: http://www.thinkoomph.com/
 */
 
@@ -66,10 +66,7 @@ class view_all_posts_pages {
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
 		
-		add_filter( 'query_vars', array( $this, 'filter_query_vars' ) );
-		
-		add_action( 'delete_option_rewrite_rules', array( $this, 'action_delete_option_rewrite_rules' ), 999 );
-		add_filter( 'page_rewrite_rules', array( $this, 'filter_page_rewrite_rules' ), 99 );
+		add_action( 'init', array( $this, 'action_init' ), 20 );
 		
 		add_filter( 'the_content', array( $this, 'filter_the_content' ), 0 );
 		
@@ -109,89 +106,13 @@ class view_all_posts_pages {
 	}
 	
 	/*
-	 * Register query variable
-	 * @param array $query_vars
-	 * @filter query_vars
-	 * @return array
-	 */
-	function filter_query_vars( $query_vars ) {
-		$query_vars[] = $this->query_var;
-	
-		return $query_vars;
-	}
-	
-	/*
-	 * Add rewrite rules if not using default permalinks.
-	 * @uses $wp_rewrite, add_rewrite_endpoint, get_post_types, add_rewrite_rule
+	 * Add rewrite endpoint, which sets query var and rewrite rules
+	 * @uses add_rewrite_endpoint
 	 * @action init
 	 * @return null
 	 */
-	function action_delete_option_rewrite_rules() {
-		global $wp_rewrite;
-		
-		if( $wp_rewrite->permalink_structure ) {
-			//Posts
-			add_rewrite_endpoint( $this->query_var, 9999 );
-			
-			//Custom post types
-			$post_types = get_post_types( array( '_builtin' => false ), 'objects' );
-			foreach( $post_types as $post_type ) {
-				if( !is_object( $post_type ) || !property_exists( $post_type, 'rewrite' ) || $post_type->rewrite == false )
-					continue;
-				
-				$post_type_slug = '';
-				
-				if( $post_type->rewrite[ 'with_front' ] && $wp_rewrite->front != '/' )
-					$post_type_slug .= $wp_rewrite->front;
-					
-				$post_type_slug .= $post_type->rewrite[ 'slug' ];
-				
-				add_rewrite_rule( $post_type_slug . '/([^/]+)(/[0-9]+)?/' . $this->query_var . '(/(.*))?/?$', $wp_rewrite->index . '?' . $post_type->query_var . '=$matches[1]&page=$matches[2]&' . $this->query_var . '=$matches[3]', 'top' );
-			}
-			
-			//Pages - handled via this::filter_page_rewrite_rules() to prevent their generality from conflicting with other rewrite rules.
-		}
-	}
-	
-	/*
-	 * Add page rewrite rules
-	 *
-	 * For permalink structures starting with %postname%, verbose rules are required, meaning rules specific to each page are generated.
-	 *
-	 * @param array $rules
-	 * @uses $wp_rewrite
-	 * @return array
-	 */
-	function filter_page_rewrite_rules( $rules ) {
-		global $wp_rewrite;
-		
-		//Build rules based on permalink structure and position of %postname% if present
-		if( stripos( $wp_rewrite->permalink_structure, '/%postname%' ) === 0 ) {
-			$page_rules = $_page_rules_first = $_page_rules_last = array();
-			
-			$uris = $wp_rewrite->page_uri_index();
-			$uris = is_array( $uris ) && array_key_exists( 0, $uris ) && is_array( $uris[ 0 ] ) && !empty( $uris[ 0 ] ) ? $uris[ 0 ] : array( '' => '' );
-			
-			foreach( $uris as $uri => $page_id ) {
-				$_page_rules_first[ $uri . '/' . $this->query_var . '(/[0-9]+)?/?$' ] = $wp_rewrite->index . '?pagename=' . $uri . '&' . $this->query_var . '=$matches[1]';
-				$_page_rules_last[ '(' . $uri . ')/' . $this->query_var . '(/[0-9]+)?/?$' ] = $wp_rewrite->index . '?pagename=$matches[1]&' . $this->query_var . '=$matches[2]';
-			}
-			
-			if( !empty( $_page_rules_first ) )
-				$page_rules = array_merge( $page_rules, $_page_rules_first );
-			if( !empty( $_page_rules_last ) )
-				$page_rules = array_merge( $page_rules, $_page_rules_last );
-		}
-		else
-			$page_rules = array(
-				'(.+?)/' . $this->query_var . '(/[0-9]+)?/?$' => $wp_rewrite->index . '?pagename=$matches[1]&' . $this->query_var . '=$matches[2]'
-			);
-		
-		//Merge additional rules, if any
-		if( isset( $page_rules ) && is_array( $page_rules ) && !empty( $page_rules ) )
-			$rules = array_merge( $page_rules, $rules );
-		
-		return $rules;
+	function action_init() {
+		add_rewrite_endpoint( $this->query_var, EP_ALL );
 	}
 	
 	/*
