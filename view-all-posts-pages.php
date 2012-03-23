@@ -4,7 +4,7 @@ Plugin Name: View All Post's Pages
 Plugin URI: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Description: Provides a "view all" (single page) option for posts, pages, and custom post types paged using WordPress' <a href="http://codex.wordpress.org/Write_Post_SubPanel#Quicktags" target="_blank"><code>&lt;!--nextpage--&gt;</code> Quicktag</a> (multipage posts).
 Author: Erick Hitter (Oomph, Inc.)
-Version: 0.4
+Version: 0.4.1
 Author URI: http://www.thinkoomph.com/
 */
 
@@ -34,35 +34,13 @@ class view_all_posts_pages {
 	var $notice_key = 'vapp_admin_notice_dismissed';
 	
 	/*
-	 * Register deactivation hook and filter.
-	 * @uses register_deactivation_hook, add_filter
+	 * Register actions and filters.
+	 * @uses register_deactivation_hook, add_action, add_filter, this::get_options, apply_filters, get_option
 	 * @return null
 	 */
 	function __construct() {
 		register_deactivation_hook( __FILE__, array( $this, 'deactivation_hook' ) );
-		add_action( 'plugins_loaded', array( $this, 'action_plugins_loaded' ) );
-	}
-	
-	/*
-	 * Clean up after plugin deactivation.
-	 * @uses flush_rewrite_rules, delete_option
-	 * @action register_deactivation_hook
-	 * @return null
-	 */
-	function deactivation_hook() {
-		flush_rewrite_rules();
 		
-		delete_option( $this->settings_key );
-		delete_option( $this->notice_key );
-	}
-		
-	/*
-	 * Register actions and filters.
-	 * @uses add_action, add_filter, this::get_options, apply_filters, get_option
-	 * @action plugins_loaded
-	 * @return null
-	 */
-	function action_plugins_loaded() {
 		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
 		
@@ -80,6 +58,19 @@ class view_all_posts_pages {
 		
 		if ( apply_filters( 'vapp_display_rewrite_rules_notice', true ) && ! get_option( $this->notice_key ) )
 			add_action( 'admin_notices', array( $this, 'action_admin_notices_activation' ) );
+	}
+	
+	/*
+	 * Clean up after plugin deactivation.
+	 * @uses flush_rewrite_rules, delete_option
+	 * @action register_deactivation_hook
+	 * @return null
+	 */
+	function deactivation_hook() {
+		flush_rewrite_rules();
+		
+		delete_option( $this->settings_key );
+		delete_option( $this->notice_key );
 	}
 	
 	/*

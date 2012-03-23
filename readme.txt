@@ -4,7 +4,7 @@ Donate link: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Tags: view all, pages, paged, paged post, multipage, single view, single page, wp_link_pages, nextpage, next page, quicktag
 Requires at least: 3.2.1
 Tested up to: 3.3
-Stable tag: 0.4
+Stable tag: 0.4.1
 
 Provides a "view all" (single page) option for content paged using WordPress' &lt;!--nextpage--&gt; Quicktag (multipage posts).
 == Description ==
@@ -43,6 +43,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 
 == Changelog ==
 
+= 0.4.1 =
+* Eliminate use of plugins_loaded action since plugin has no dependencies on other plugins. All code previously located in the associated method has been moved to the class's constructor. props danielbachhuber.
+
 = 0.4 =
 * Add filter to disable rewrite rules notice.
 * Apply esc_html() to link text during output.
@@ -58,6 +61,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 * Intial release
 
 == Upgrade Notice ==
+
+= 0.4.1 =
+Eliminates use of plugins_loaded action since plugin has no dependencies on other plugins. All code previously located in the associated method has been moved to the class's constructor. props danielbachhuber.
 
 = 0.4 =
 Adds filter to disable rewrite rules notice. Also applies esc_html() to link text when output since HTML isn't permitted in the link text.
