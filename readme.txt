@@ -5,6 +5,8 @@ Tags: view all, pages, paged, paged post, multipage, single view, single page, w
 Requires at least: 3.2.1
 Tested up to: 3.4
 Stable tag: 0.6.1
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides a "view all" (single page) option for content paged using WordPress' &lt;!--nextpage--&gt; Quicktag (multipage posts).
 == Description ==
