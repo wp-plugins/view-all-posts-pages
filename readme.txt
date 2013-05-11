@@ -3,8 +3,8 @@ Contributors: ethitter, thinkoomph
 Donate link: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Tags: view all, pages, paged, paged post, multipage, single view, single page, wp_link_pages, nextpage, next page, quicktag
 Requires at least: 3.2.1
-Tested up to: 3.5
-Stable tag: 0.6.1
+Tested up to: 3.6
+Stable tag: 0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 
 == Changelog ==
 
+= 0.7 =
+* Further ensure that WordPress doesn't think a post is paged when viewing the full post content unpaged. Ensures that code checking the `$multipage` variable will function properly. Props @batmoo.
+
 = 0.6.1 =
 * Revert change in is_view_all() method made in version 0.6 as it breaks the method, rendering the plugin inoperable.
 
@@ -77,11 +80,14 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 
 == Upgrade Notice ==
 
+= 0.7 =
+Further ensures plugins and themes correctly see a "View All" page as full post content.
+
 = 0.6.1 =
 Resolves a problem where requests for view-all templates redirect to the article.
 
 = 0.6 =
-Adds better support for sites that use verbose page rules, resolving situations where requests for print template redirect to the post.
+Adds better support for sites that use verbose page rules, resolving situations where requests for view-all template redirect to the post.
 
 = 0.5 =
 Infinite loops may result from previous method used to display entire post's content for the View All display. This update eliminates that possibility by using the the_post action rather than the the_content filter. Props to the WordPress.com VIP Support team (batmoo) and stevenkword.
