@@ -4,7 +4,7 @@ Donate link: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Tags: view all, pages, paged, paged post, multipage, single view, single page, wp_link_pages, nextpage, next page, quicktag
 Requires at least: 3.2.1
 Tested up to: 3.6
-Stable tag: 0.7
+Stable tag: 0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,12 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 
 == Changelog ==
 
+= 0.8 =
+* When WordPress determines a request is a 404, don't activate the plugin's functionality.
+* Convert the plugin to a singleton.
+* Audit entire plugin for translation readyness.
+* Correct phpdoc.
+
 = 0.7 =
 * Further ensure that WordPress doesn't think a post is paged when viewing the full post content unpaged. Ensures that code checking the `$multipage` variable will function properly. Props @batmoo.
 
@@ -79,6 +85,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.8 =
+Plugin won't unnecessarily execute its functionality if no posts are available and is now more thoroughly translatable.
 
 = 0.7 =
 Further ensures plugins and themes correctly see a "View All" page as full post content.
