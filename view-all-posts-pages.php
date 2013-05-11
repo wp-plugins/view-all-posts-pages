@@ -4,7 +4,7 @@ Plugin Name: View All Post's Pages
 Plugin URI: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Description: Provides a "view all" (single page) option for posts, pages, and custom post types paged using WordPress' <a href="http://codex.wordpress.org/Write_Post_SubPanel#Quicktags" target="_blank"><code>&lt;!--nextpage--&gt;</code> Quicktag</a> (multipage posts).
 Author: Erick Hitter & Oomph, Inc.
-Version: 0.6.1
+Version: 0.7
 Author URI: http://www.thinkoomph.com/
 
 This program is free software; you can redistribute it and/or modify
@@ -179,7 +179,7 @@ class view_all_posts_pages {
 	 */
 	public function action_the_post( $post ) {
 		if ( $this->is_view_all() ) {
-			global $pages, $more;
+			global $pages, $more, $multipage;
 
 			$post->post_content = str_replace( "\n<!--nextpage-->\n", "\n\n", $post->post_content );
 			$post->post_content = str_replace( "\n<!--nextpage-->", "\n", $post->post_content );
@@ -189,6 +189,7 @@ class view_all_posts_pages {
 			$pages = array( $post->post_content );
 
 			$more = 1;
+			$multipage = 0;
 		}
 	}
 
