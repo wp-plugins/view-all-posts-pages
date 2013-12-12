@@ -4,7 +4,7 @@ Plugin Name: View All Post's Pages
 Plugin URI: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Description: Provides a "view all" (single page) option for posts, pages, and custom post types paged using WordPress' <a href="http://codex.wordpress.org/Write_Post_SubPanel#Quicktags" target="_blank"><code>&lt;!--nextpage--&gt;</code> Quicktag</a> (multipage posts).
 Author: Erick Hitter & Oomph, Inc.
-Version: 0.8.1
+Version: 0.9
 Author URI: http://www.thinkoomph.com/
 Text Domain: view_all_posts_pages
 
@@ -67,10 +67,6 @@ class view_all_posts_pages {
 	 *
 	 * @uses register_deactivation_hook
 	 * @uses add_action
-	 * @uses add_filter
-	 * @uses this::get_options
-	 * @uses apply_filters
-	 * @uses get_option
 	 * @return null
 	 */
 	private function setup() {
@@ -83,17 +79,6 @@ class view_all_posts_pages {
 		add_action( 'redirect_canonical', array( $this, 'filter_redirect_canonical' ) );
 
 		add_action( 'the_post', array( $this, 'action_the_post' ), 5 );
-
-		$options = $this->get_options();
-
-		if ( array_key_exists( 'wlp', $options ) && true === $options[ 'wlp' ] )
-			add_filter( 'wp_link_pages_args', array( $this, 'filter_wp_link_pages_args_early' ), 0 );
-
-		if ( $options[ 'link' ] )
-			add_filter( 'the_content', array( $this, 'filter_the_content_auto' ), $options[ 'link_priority' ] );
-
-		if ( apply_filters( 'vapp_display_rewrite_rules_notice', true ) && ! get_option( $this->notice_key ) )
-			add_action( 'admin_notices', array( $this, 'action_admin_notices_activation' ) );
 	}
 
 	/**
@@ -143,6 +128,11 @@ class view_all_posts_pages {
 	 *
 	 * @global $wp_rewrite
 	 * @uses __
+	 * @uses this::get_options
+	 * @uses add_filter
+	 * @uses apply_filters
+	 * @uses get_option
+	 * @uses add_action
 	 * @uses add_rewrite_endpoint
 	 * @action init
 	 * @return null
@@ -165,6 +155,18 @@ class view_all_posts_pages {
 			),
 			'link_priority'   => 10,
 		);
+
+		// Register additional plugin actions if settings call for them.
+		$options = $this->get_options();
+
+		if ( array_key_exists( 'wlp', $options ) && true === $options[ 'wlp' ] )
+			add_filter( 'wp_link_pages_args', array( $this, 'filter_wp_link_pages_args_early' ), 0 );
+
+		if ( $options[ 'link' ] )
+			add_filter( 'the_content', array( $this, 'filter_the_content_auto' ), $options[ 'link_priority' ] );
+
+		if ( apply_filters( 'vapp_display_rewrite_rules_notice', true ) && ! get_option( $this->notice_key ) )
+			add_action( 'admin_notices', array( $this, 'action_admin_notices_activation' ) );
 
 		// Register rewrite endpoint, which handles most of our rewrite needs
 		add_rewrite_endpoint( $this->query_var, EP_ALL );

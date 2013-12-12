@@ -3,8 +3,8 @@ Contributors: ethitter, thinkoomph
 Donate link: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
 Tags: view all, pages, paged, paged post, multipage, single view, single page, wp_link_pages, nextpage, next page, quicktag
 Requires at least: 3.2.1
-Tested up to: 3.6
-Stable tag: 0.8.1
+Tested up to: 3.8
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 * **WordPress SEO by Yoast:** This plugin's `Permalink` options, particularly *Redirect attachment URL's to parent post URL* and *Redirect ugly URL's to clean permalinks. (Not recommended in many cases!)*, interfere with View All Post's Pages' ability to display full content. Both must be disabled, and the site's rewrite rules regenerated (by visiting Options > Permalinks and clicking *Save Changes*), for View All Post's Pages to function.
 
 == Changelog ==
+
+= 0.9 =
+* Move conditional registration of some filters to `init`, both to ensure external code can interact with filters and to avoid PHP notices.
 
 = 0.8.1 =
 * Correct translation implementation issue introduced in v0.8.
@@ -88,6 +91,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.9 =
+Recommended update for anyone hoping to use plugin's filters to modify its behaviour.
 
 = 0.8.1 =
 Recommended upgrade for anyone translating plugin's interface.
