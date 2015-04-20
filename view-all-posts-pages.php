@@ -513,9 +513,9 @@ class view_all_posts_pages {
 		<div id="wpf-rewrite-flush-warning" class="error fade">
 			<p><strong><?php _e( 'View All Post\'s Pages', $this->ns ); ?></strong></p>
 			
-			<p><?php printf( __( 'You must refresh your site\'s permalinks before <em>View All Post\'s Pages</em> is fully activated. To do so, go to <a href="%s">Permalinks</a> and click the <strong><em>Save Changes</em></strong> button at the bottom of the screen.', $this->ns ), admin_url( 'options-permalink.php' ) ); ?></p>
+			<p><?php printf( __( 'You must refresh your site\'s permalinks before <em>View All Post\'s Pages</em> is fully activated. To do so, go to <a href="%s">Permalinks</a> and click the <strong><em>Save Changes</em></strong> button at the bottom of the screen.', $this->ns ), esc_url( admin_url( 'options-permalink.php' ) ) ); ?></p>
 			
-			<p><?php printf( __( 'When finished, click <a href="%s">here</a> to hide this message.', $this->ns ), admin_url( add_query_arg( $this->notice_key, 1, 'index.php' ) ) ); ?></p>
+			<p><?php printf( __( 'When finished, click <a href="%s">here</a> to hide this message.', $this->ns ), esc_url( admin_url( add_query_arg( $this->notice_key, 1, 'index.php' ) ) ) ); ?></p>
 		</div>
 		
 		<?php
