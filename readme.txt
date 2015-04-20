@@ -1,10 +1,10 @@
 === View All Post's Pages ===
 Contributors: ethitter, thinkoomph
-Donate link: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
+Donate link: http://oomphinc.com/plugins-modules/view-all-posts-pages/
 Tags: view all, pages, paged, paged post, multipage, single view, single page, wp_link_pages, nextpage, next page, quicktag
 Requires at least: 3.2.1
 Tested up to: 3.6
-Stable tag: 0.7
+Stable tag: 0.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 
 == Changelog ==
 
+= 0.7.1 =
+* Security update: correct misuse of `add_query_arg()` as identified by Sucuri: https://blog.sucuri.net/2015/04/security-advisory-xss-vulnerability-affecting-multiple-wordpress-plugins.html.
+
 = 0.7 =
 * Further ensure that WordPress doesn't think a post is paged when viewing the full post content unpaged. Ensures that code checking the `$multipage` variable will function properly. Props @batmoo.
 
@@ -79,6 +82,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.7.1 =
+Security update: correct misuse of `add_query_arg()` as identified by Sucuri: https://blog.sucuri.net/2015/04/security-advisory-xss-vulnerability-affecting-multiple-wordpress-plugins.html.
 
 = 0.7 =
 Further ensures plugins and themes correctly see a "View All" page as full post content.

@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: View All Post's Pages
-Plugin URI: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
+Plugin URI: http://oomphinc.com/plugins-modules/view-all-posts-pages/
 Description: Provides a "view all" (single page) option for posts, pages, and custom post types paged using WordPress' <a href="http://codex.wordpress.org/Write_Post_SubPanel#Quicktags" target="_blank"><code>&lt;!--nextpage--&gt;</code> Quicktag</a> (multipage posts).
 Author: Erick Hitter & Oomph, Inc.
-Version: 0.7
-Author URI: http://www.thinkoomph.com/
+Version: 0.7.1
+Author URI: http://oomphinc.com/
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -593,9 +593,9 @@ class view_all_posts_pages {
 		<div id="wpf-rewrite-flush-warning" class="error fade">
 			<p><strong><?php _e( 'View All Post\'s Pages', 'view_all_posts_pages' ); ?></strong></p>
 
-			<p><?php printf( __( 'You must refresh your site\'s permalinks before <em>View All Post\'s Pages</em> is fully activated. To do so, go to <a href="%s">Permalinks</a> and click the <strong><em>Save Changes</em></strong> button at the bottom of the screen.', 'view_all_posts_pages' ), admin_url( 'options-permalink.php' ) ); ?></p>
+			<p><?php printf( __( 'You must refresh your site\'s permalinks before <em>View All Post\'s Pages</em> is fully activated. To do so, go to <a href="%s">Permalinks</a> and click the <strong><em>Save Changes</em></strong> button at the bottom of the screen.', 'view_all_posts_pages' ), esc_url( admin_url( 'options-permalink.php' ) ) ); ?></p>
 
-			<p><?php printf( __( 'When finished, click <a href="%s">here</a> to hide this message.', 'view_all_posts_pages' ), admin_url( add_query_arg( $this->notice_key, 1, 'index.php' ) ) ); ?></p>
+			<p><?php printf( __( 'When finished, click <a href="%s">here</a> to hide this message.', 'view_all_posts_pages' ), esc_url( admin_url( add_query_arg( $this->notice_key, 1, 'index.php' ) ) ) ); ?></p>
 		</div>
 
 		<?php
