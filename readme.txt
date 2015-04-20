@@ -1,10 +1,10 @@
 === View All Post's Pages ===
 Contributors: ethitter, thinkoomph
-Donate link: http://www.thinkoomph.com/plugins-modules/view-all-posts-pages/
+Donate link: http://oomphinc.com/plugins-modules/view-all-posts-pages/
 Tags: view all, pages, paged, paged post, multipage, single view, single page, wp_link_pages, nextpage, next page, quicktag
 Requires at least: 3.2.1
 Tested up to: 3.4
-Stable tag: 0.5
+Stable tag: 0.5.1
 
 Provides a "view all" (single page) option for content paged using WordPress' &lt;!--nextpage--&gt; Quicktag (multipage posts).
 == Description ==
@@ -43,6 +43,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 
 == Changelog ==
 
+= 0.5.1 =
+* Security update: correct misuse of `add_query_arg()` as identified by Sucuri: https://blog.sucuri.net/2015/04/security-advisory-xss-vulnerability-affecting-multiple-wordpress-plugins.html.
+
 = 0.5 =
 * Change how post content is modified for View All display. Rather than using the `the_content` filter, global variables are overridden in the `the_post` action. Ensures that infinite loops don't result from shortcode processing and other uses of the `the_content` filter. Props to the WordPress.com VIP Support team (batmoo) and stevenkword.
 * Introduces the `vapp_display_link` filter to allow plugins and themes to suppress the automatic View All link on specific posts. Return `false` to suppress the link. Filter also passes post ID, plugin options, and post object.
@@ -65,6 +68,9 @@ This plugin is known to conflict with certain plugins, many pertaining to SEO an
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.5.1 =
+Security update: correct misuse of `add_query_arg()` as identified by Sucuri: https://blog.sucuri.net/2015/04/security-advisory-xss-vulnerability-affecting-multiple-wordpress-plugins.html.
 
 = 0.5 =
 Infinite loops may result from previous method used to display entire post's content for the View All display. This update eliminates that possibility by using the the_post action rather than the the_content filter. Props to the WordPress.com VIP Support team (batmoo) and stevenkword.
